@@ -1,34 +1,37 @@
-# ⚡ Análise de Qualidade de Energia Elétrica (QEE)
+# Análise de Qualidade de Energia Elétrica (QEE)
 
-Este projeto consiste em um **Pipeline ETL e Analytics** desenvolvido em Python para o processamento de dados massivos de analisadores de energia elétrica. 
+Script em Python desenvolvido para automatizar o processamento, tratamento e análise de dados provenientes de analisadores de energia elétrica.
 
-**O Problema:** A análise tradicional de Qualidade de Energia costuma ser um processo manual, lento e suscetível a erros, exigindo o manuseio de milhares de linhas no Excel. Além disso, a falta de precisão no monitoramento do Fator de Potência resulta em multas regulatórias pesadas (faturamento de energia reativa excedente).
+O processo tradicional de análise de qualidade de energia costuma ser manual e suscetível a erros devido ao alto volume de dados exportados em planilhas. Este projeto automatiza a extração, o tratamento das grandezas elétricas e o diagnóstico final, gerando resultados em conformidade com o Módulo 8 do PRODIST/ANEEL. O foco principal é a precisão no monitoramento do Fator de Potência para evitar multas de energia reativa excedente.
 
-**A Solução:** Desenvolvi este script para automatizar 100% da extração, tratamento e diagnóstico das grandezas elétricas, gerando laudos técnicos precisos e em conformidade com o **Módulo 8 do PRODIST/ANEEL** em segundos.
+## Stack e Tecnologias
 
-## 🛠️ Tecnologias Utilizadas
 * **Linguagem:** Python 3.12
-* **Manipulação e Transformação de Dados (ETL):** Pandas, NumPy
-* **Data Visualization:** Matplotlib
-* **Documentação Técnica:** Exportação automatizada de tabelas e laudos para **LaTeX**
+* **Processamento e Tratamento de Dados:** Pandas, NumPy
+* **Visualização:** Matplotlib
+* **Documentação Técnica:** Exportação automatizada de tabelas e resultados formatados para integração direta em relatórios LaTeX.
 
-## 📊 Principais Funcionalidades (Pipeline de Dados)
-1. **Ingestão e Limpeza (Data Quality):** Tratamento automático de timestamps, preenchimento de *missing values* e correção de dados corrompidos oriundos dos arquivos `.xlsx` do analisador.
-2. **Feature Engineering:** Cálculo vetorial avançado de potências (Ativa, Reativa, Aparente) e Fator de Potência (FP).
-3. **Análise de Harmônicas:** Avaliação das componentes de corrente e Distorção Harmônica Total (THD).
-4. **Prescriptive Analytics (Ação Proposta):** Cálculo automático e dimensionamento do banco de capacitores ideal focado na mitigação do pico de demanda.
-5. **Automação de Relatórios:** Criação de dashboards executivos (PNG) e tabelas formatadas prontas para compilação em relatórios oficiais.
+## Estrutura do Pipeline
 
-## 📈 Impacto e Resumo do Último Diagnóstico (Exemplo prático)
-O script processou e diagnosticou **1.666 amostras** instantaneamente, entregando os seguintes *insights* acionáveis:
+1. **Ingestão e Tratamento:** Correção automática de timestamps, tratamento de valores nulos (missing values) e higienização de dados corrompidos oriundos dos arquivos `.xlsx` brutos.
+2. **Cálculos Elétricos:** Cálculo vetorial de potências (Ativa, Reativa, Aparente) e Fator de Potência (FP).
+3. **Análise Harmônica:** Avaliação das componentes de corrente e Distorção Harmônica Total (THD).
+4. **Dimensionamento Automático:** Cálculo do banco de capacitores ideal, focado na correção do fator de potência durante o pico de demanda.
+5. **Automação de Saídas:** Geração de gráficos de análise e tabelas padronizadas para anexação em laudos técnicos.
+
+## Estudo de Caso Prático
+
+Em uma execução de validação, o script processou uma base de 1.666 amostras elétricas, entregando os seguintes resultados para tomada de decisão:
+
 * **Demanda Máxima Identificada:** 51,39 kW
-* **Risco Regulatório (Fator de Potência):** Média de 0,949, com **298 ocorrências abaixo do limite normativo** (0,92).
-* **Solução Proposta:** Instalação de Banco Capacitivo de **2,85 kvar** no pico de demanda para mitigar o pagamento de multas.
+* **Fator de Potência (Risco Regulatório):** Média geral de 0,949, com identificação precisa de 298 ocorrências abaixo do limite normativo da ANEEL (0,92).
+* **Solução Proposta:** Dimensionamento e indicação técnica para instalação de um Banco Capacitivo de 2,85 kvar focado no horário de ponta.
 
-## 🚀 Como Executar
+## Como Executar
 
-1. Clone o repositório.
-2. Insira o arquivo de medições na raiz do projeto (configurado no `.gitignore` para proteção dos dados originais).
+1. Clone o repositório em sua máquina local.
+2. Insira o arquivo bruto de medições na raiz do projeto (o arquivo está configurado no `.gitignore` para proteção dos dados originais do cliente/equipamento).
 3. Execute o script principal:
+
    ```bash
    python tratamento_dados_qee.py
