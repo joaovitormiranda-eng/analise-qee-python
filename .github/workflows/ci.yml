@@ -57,7 +57,7 @@ jobs:
         if: runner.os == 'Linux'
         run: python -m pip_audit -r requirements.lock --disable-pip --no-deps --progress-spinner off
       - name: Scientific, integration and security tests
-        run: python -m pytest -q --cov=jv_qee --cov-report=term-missing --cov-report=xml:ci-evidence/coverage.xml --junitxml=ci-evidence/pytest.xml
+        run: python -m pytest -q -o pythonpath= --cov=jv_qee --cov-report=term-missing --cov-report=xml:ci-evidence/coverage.xml --junitxml=ci-evidence/pytest.xml
       - name: Generate and verify synthetic SVG artifacts
         if: runner.os == 'Linux'
         run: |
