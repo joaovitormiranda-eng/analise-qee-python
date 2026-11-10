@@ -1,0 +1,9 @@
+include LICENSE README.md SECURITY.md CONTRIBUTING.md requirements.lock constraints.txt
+recursive-include docs *.md *.txt *.svg
+recursive-include configs *.json
+recursive-include tests *.py
+recursive-include scripts *.py
+prune legacy
+prune outputs
+prune build
+global-exclude __pycache__ *.py[cod] desktop.ini .DS_Store

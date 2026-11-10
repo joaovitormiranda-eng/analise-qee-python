@@ -1,0 +1,73 @@
+name: Scientific QEE CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Explicit bash makes multi-command checks fail fast on both runner platforms.
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: qee-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: QEE QA (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      MPLBACKEND: Agg
+      PYTHONUTF8: '1'
+    steps:
+      - name: Checkout reviewed revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.11'
+      - name: Install verified dependencies and local package
+        run: |
+          python -m pip install --only-binary=:all: --require-hashes -r requirements.lock
+          python -m pip install --no-deps --no-build-isolation .
+          python -m pip check
+          python scripts/check_lock.py
+      - name: Lint and format
+        run: |
+          python -m ruff check src tests scripts
+          python -m ruff format --check src tests scripts
+      - name: Static security and source publication guards
+        run: |
+          python -m bandit -r src scripts -ll
+          python scripts/source_guard.py
+      - name: Audit pinned dependencies
+        if: runner.os == 'Linux'
+        run: python -m pip_audit -r requirements.lock --disable-pip --no-deps --progress-spinner off
+      - name: Scientific, integration and security tests
+        run: python -m pytest -q -o pythonpath= --cov=jv_qee --cov-report=term-missing --cov-report=xml:ci-evidence/coverage.xml --junitxml=ci-evidence/pytest.xml
+      - name: Generate and verify synthetic SVG artifacts
+        if: runner.os == 'Linux'
+        run: |
+          python -m jv_qee suite --n 144 --output ci-generated
+          python scripts/verify_artifacts.py ci-generated --evidence ci-evidence
+      - name: Upload bounded QA evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: qee-qa-${{ matrix.os }}
+          path: ci-evidence/
+          if-no-files-found: error
+          retention-days: 7
