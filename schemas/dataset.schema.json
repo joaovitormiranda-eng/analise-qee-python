@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Synthetic QEE provenance contract",
+  "type": "object",
+  "required": [
+    "source",
+    "is_synthetic",
+    "normative_assessment",
+    "scenarios"
+  ],
+  "properties": {
+    "source": {
+      "const": "synthetic"
+    },
+    "is_synthetic": {
+      "const": true
+    },
+    "normative_assessment": {
+      "const": "not_assessed"
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1
+    }
+  }
+}

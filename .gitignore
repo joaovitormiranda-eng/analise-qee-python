@@ -3,3 +3,26 @@
 figuras/
 resultados/
 __pycache__/
+# New synthetic build outputs / environments
+.venv/
+outputs/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+*.pyc
+build/
+dist/
+
+# Local tools and OS metadata
+desktop.ini
+Thumbs.db
+.DS_Store
+.coverage*
+htmlcov/
+coverage.xml
+*.log
+*.tmp
+
+.ruff_cache/
+ci-generated/
+ci-evidence/
